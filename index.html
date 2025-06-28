@@ -267,7 +267,7 @@
                     <div id="confirmationMessage" class="confirmation-message mt-4 text-center">
                         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
                             <strong class="font-bold">Thank you!</strong>
-                            <span class="block sm:inline"> We will be in touch within 24 business hours.</span>
+                            <span class="block sm:inline"> We will be in touch within 1-2 business days.</span>
                         </div>
                     </div>
                 </div>
@@ -313,7 +313,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
-                <p>&copy; 2023 Parea Labs. All rights reserved.</p>
+                <p>&copy; 2025 Parea Labs. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -349,24 +349,38 @@
             });
         });
 
-        // Form submission
+        // Form submission to Google Form
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // In a real implementation, you would send the form data to a server here
-            // For this example, we'll just show the confirmation message
+            const name = encodeURIComponent(document.getElementById('name').value);
+            const email = encodeURIComponent(document.getElementById('email').value);
+            const message = encodeURIComponent(document.getElementById('message').value);
             
-            // Reset form
-            this.reset();
+            const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLSfcdRC5Vo3VpUF3umXUtKTw5XXQTngzHDJ2oo0hUy_hsShdWQ/formResponse?entry.1202953786=${name}&entry.1776435927=${email}&entry.1949801066=${message}&submit=Submit`;
             
-            // Show confirmation message
-            const confirmation = document.getElementById('confirmationMessage');
-            confirmation.classList.add('show');
-            
-            // Hide confirmation after 5 seconds
-            setTimeout(() => {
-                confirmation.classList.remove('show');
-            }, 5000);
+            fetch(formUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then(() => {
+                // Reset form
+                this.reset();
+                
+                // Show confirmation message
+                const confirmation = document.getElementById('confirmationMessage');
+                confirmation.classList.add('show');
+                
+                // Hide confirmation after 5 seconds
+                setTimeout(() => {
+                    confirmation.classList.remove('show');
+                }, 5000);
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting the form. Please try again.');
+            });
         });
 
         // Add shadow to navbar on scroll
